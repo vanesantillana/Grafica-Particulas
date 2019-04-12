@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <GL/glut.h>
+#include <Vector>
+//#include <particula.h>
 /*
 using namespace std;
 #include <iostream>
@@ -15,6 +17,9 @@ using namespace std;
 #define ECHAP 27
 void init_scene();
 void render_scene();
+float screen_width = 800;
+float screen_height = 800;
+
 GLvoid initGL();
 GLvoid window_display();
 GLvoid window_reshape(GLsizei width, GLsizei height);
@@ -22,7 +27,6 @@ GLvoid window_key(unsigned char key, int x, int y);
 
 //function called on each frame
 GLvoid window_idle();
-
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
@@ -30,7 +34,7 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
 
-	glutInitWindowSize(800, 800);
+	glutInitWindowSize(screen_width, screen_height);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("Particulas");
 
@@ -77,7 +81,7 @@ GLvoid initGL()
 }
 
 /////////////////////////////////
-//Particula
+//SOL
 /////////////////////////////////
 
 // Variables de rotacion
@@ -92,6 +96,19 @@ void sol(){
 	rsol+=vs;
 }
 
+/////////////////////////////////
+//Particula
+/////////////////////////////////
+void dibujar(float x, float y){
+	//Particula (x,y);
+}
+Vector mouseCoord;
+
+void Mouse(int btn,int state,int x,int y) {
+	mouseCoord.x = x - screen_width/2;
+	mouseCoord.y = -y + screen_height/2;
+	printf(mouseCoord.x);
+}
 
 GLvoid window_display()
 {
@@ -103,7 +120,8 @@ GLvoid window_display()
 	glLoadIdentity();
 	glOrtho(-25.0f, 25.0f, -25.0f, 25.0f, -25.0f, 25.0f);
 
-	sol();
+	//sol();
+	glutMouseFunc(Mouse);
 
 	glutSwapBuffers();
 
