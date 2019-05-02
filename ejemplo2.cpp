@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <stdio.h>
-#include "main.h"
+//#include "main.h"
 #include <stdlib.h>
 #include <GL/glut.h>
 /*
