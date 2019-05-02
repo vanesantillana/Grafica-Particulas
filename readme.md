@@ -6,6 +6,10 @@ El siguiente comando para compilar
 ```
 gcc particulas.cpp `pkg-config opencv --libs --cflags` -o foo -lstdc++ -lglut -lGLU -lGL -lm
 ```
+Para la prueba de particulas
+```
+gcc libstdc++.so.6 -o foo particulasPrueba.cpp -lglut -lGLU -lGL -lm
+```
 
 ### Tareas
 * Obtener posicion del Puntero
