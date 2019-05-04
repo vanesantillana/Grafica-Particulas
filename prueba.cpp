@@ -6,12 +6,12 @@
 
 using namespace std;
 
-const int MaxParticles = 200;		//max de particulas
+const int MaxParticles = 10;		//max de particulas
 int currentParticles = 5;			//Particulas en la pantalla
 
 double mouseX;						//coordinadas x , y
 double mouseY;
-double sizeChange=0.5;				// tamaño de las particulas
+double sizeChange=10;				// tamaño de las particulas
 double speedChange=30.0;
 int range=8000;						//Pull Push range
 int pullPush;
@@ -51,7 +51,7 @@ void initParticles(void){
 void display(void){
 	if(pause == 0){
 		glRasterPos2f(250.0, 500.0);			//When paused, write the following at the given coordinates with glRasterPos
-		glColor3f(1.0,0.0,0.0);
+		glColor3f(0.0,0.0,0.0);
 
 		string str1("PAUSED");
 		for (int i = 0; i < str1.size(); i++){
@@ -104,10 +104,11 @@ void display(void){
 		}
 	}
 	else if(pause==1){
-	
+
 	int i;							//if not paused, run display function normally
 	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(0.10f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.15f, 0.15f, 0.3f, 0.3f);  // colores de la pantalla
+
 	glRasterPos2f(535.0, 5.0);
 	string str11("P - Pause");
 	for (int j = 0; j < str11.size(); j++){
@@ -117,7 +118,7 @@ void display(void){
 
 		Particles[i].XCoor += Particles[i].dX*speedChange;	//Logic for moving the particle
 		Particles[i].YCoor += Particles[i].dY*speedChange;
-		
+
 		if((Particles[i].XCoor <= 1) | (Particles[i].XCoor >= 599)){ //Logic for bouncing off the wall
 			Particles[i].dX = Particles[i].dX*(1);
 		}
@@ -131,21 +132,21 @@ void display(void){
 			Particles[i].dX = 0;
 			Particles[i].dY = 0;
 		}
-        
+
         for(int j = 0; j<= currentParticles; j++)
         {
             if((Particles[i].YCoor > 601)||(Particles[i].YCoor < -1)){
-                
+
                 Particles[i].YCoor = 599;
             }
             if(Particles[i].XCoor < 1){
-                
+
                 Particles[i].XCoor = 599;
-                
-                
+
+
             }else if(Particles[i].XCoor > 599){
                 Particles[i].XCoor = 1;
-                
+
             }
         }
 		if(Particles[i].affected == true){		//If the particle is affected by pull or push, make it move properly
@@ -156,7 +157,7 @@ void display(void){
 				for(i=0;i<currentParticles; i++){				//Calculate relative distance in both x and y between each particle and mouse
 					temp1 = Particles[i].XCoor - mouseX;
 					temp2 = (Particles[i].YCoor) - mouseY;
-			
+
 					if(pow(temp1,2) + pow(temp2,2) <= range){	//Relate the distance in between with the range
 						Particles[i].dX = -temp1*0.0015;		//Change direction of particle
 						Particles[i].dY = -temp2*0.0015;
@@ -166,11 +167,11 @@ void display(void){
 
 			if(pullPush == 1){
 				int i;
-		
+
 				for(i=0;i<currentParticles; i++){
 					temp1 = Particles[i].XCoor - mouseX;
 					temp2 = Particles[i].YCoor - mouseY;
-			
+
 					if(pow(temp1,2) + pow(temp2,2) <= range){
 						Particles[i].dX = temp1*0.0015;
 						Particles[i].dY = temp2*0.0015;
@@ -187,13 +188,13 @@ void display(void){
 		glColor3f(1.0,0.0,0.0);
 	}
 	}
-	
+
 	glutSwapBuffers();
 }
 
 void kbd(unsigned char key, int x, int y){
 	y = 800 - y;		//600 - y = fixed coordinate system
-	
+
 	//Keyboard logic for all keys used
 	if(glutGetModifiers() == GLUT_ACTIVE_ALT && (key == 'q' || key == 'Q') )
 	{
@@ -202,7 +203,7 @@ void kbd(unsigned char key, int x, int y){
 
 	if(key == 'p' || key =='P'){	//Set pause variable to active or inactive
 		if(pause == 1){
-		pause = 0;		
+		pause = 0;
 		}
 		else if(pause == 0){
 			pause = 1;
@@ -256,12 +257,12 @@ void kbd(unsigned char key, int x, int y){
 	}
 	if(key == 'a' || key == 'A' ){	//Add a particle
 		glBegin(GL_POINTS);			//Draws a particle with the next element in the array by setting its parameters to randomly
-		glColor3f(1.0,0.0,0.0);
+		glColor3f(0.0,0.0,0.0);
 		Particles[currentParticles].dX = (rand()%10*0.01)* pow(-1.0,rand()%2)*pause;
 		Particles[currentParticles].dY = (rand()%10*0.01)* pow(-1.0,rand()%2)*pause;
 		Particles[currentParticles].size = rand()%12 + 5;
 		//location is not random so we set it next to the mouse coordinates
-		glVertex2i(Particles[currentParticles].XCoor = x, Particles[currentParticles].YCoor = y);	
+		glVertex2i(Particles[currentParticles].XCoor = x, Particles[currentParticles].YCoor = y);
 		glEnd();
 		currentParticles += 1;		//We add 1 to current particles to keep track of how many particles in the array to draw
 		if(currentParticles > MaxParticles){	//Set max limit on particles
@@ -292,7 +293,7 @@ void kbd(unsigned char key, int x, int y){
 			currentParticles = 0;
 		}
 	}
-	
+
 }
 
 
@@ -317,15 +318,15 @@ void mouse(int btn, int state, int x, int y){
 		for(i=0;i<currentParticles; i++){
 			temp1 = Particles[i].XCoor - x;
 			temp2 = Particles[i].YCoor - y;
-			
+
 			if(pow(temp1,2) + pow(temp2,2) <= range){
 				Particles[i].dX = -temp1*0.0015*pause;
 				Particles[i].dY = -temp2*0.0015*pause;
 				Particles[i].affected = true;
 			}
-			
+
 		}
-		
+
 	}
 
 	if(btn == GLUT_LEFT_BUTTON && state==GLUT_UP)
@@ -344,7 +345,7 @@ void mouse(int btn, int state, int x, int y){
 			}
 		}
 	}
-	
+
 	if(btn == GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
 	{
 		//Viceversa to LMB
@@ -354,18 +355,18 @@ void mouse(int btn, int state, int x, int y){
 		int i;
 		double temp1;
 		double temp2;
-		
+
 		for(i=0;i<currentParticles; i++){
 			temp1 = Particles[i].XCoor - x;
 			temp2 = Particles[i].YCoor - y;
-			
+
 			if(pow(temp1,2) + pow(temp2,2) <= range){
 				Particles[i].dX = temp1*0.00125*pause;
 				Particles[i].dY = temp2*0.00125*pause;
 				Particles[i].affected = true;
 			}
 		}
-		
+
 	}
 
 	if(btn == GLUT_RIGHT_BUTTON && state==GLUT_UP)
@@ -392,11 +393,11 @@ void mouse(int btn, int state, int x, int y){
 	double temp1;
 	double temp2;
 	if(pullPush == 0){		//When pullPush = Pull (0), move particles towards mouse when mouse in motion if particle in range
-		
+
 		for(i=0;i<currentParticles; i++){
 			temp1 = Particles[i].XCoor - x;
 			temp2 = Particles[i].YCoor - y;
-			
+
 			if(pow(temp1,2) + pow(temp2,2) <= range){
 				Particles[i].dX = -temp1*0.0015*pause;
 				Particles[i].dY = -temp2*0.0015*pause;
@@ -409,7 +410,7 @@ void mouse(int btn, int state, int x, int y){
 		for(i=0;i<currentParticles; i++){
 			temp1 = Particles[i].XCoor - x;
 			temp2 = Particles[i].YCoor - y;
-			
+
 			if(pow(temp1,2) + pow(temp2,2) <= range){
 				Particles[i].dX = temp1*0.0015*pause;
 				Particles[i].dY = temp2*0.0015*pause;
@@ -422,16 +423,16 @@ void mouse(int btn, int state, int x, int y){
 
 */
 int main(int argc, char** argv)
-{	
-	
+{
+
 	glutInit(&argc, argv);		//starts up GLUT
-	
+
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(800, 800);
 	initParticles();
 	glutCreateWindow("Sistema de Particulas");	//creates the window
 	glutInitDisplayMode(GLUT_DOUBLE);
-	glutDisplayFunc(display);		
+	glutDisplayFunc(display);
 	glutKeyboardFunc(kbd);
 	//glutMotionFunc(motion);
 	glutMouseFunc(mouse);
@@ -440,5 +441,5 @@ int main(int argc, char** argv)
 	glutIdleFunc(idle);
 	glutMainLoop();				//starts the event loop
 
-	return(0);					
+	return(0);
 }
