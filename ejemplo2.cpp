@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <stdio.h>
 //#include "main.h"
@@ -16,12 +15,12 @@ class Particle
 {
 private:
 	float lifetime;                       // Lifetime of the particle
-	float decay;                          // decay speed of the particle
+	float decay;                          // velocidad de descomposición de la partícula
 	float r,g,b;                          // color values of the particle
 	float xpos,ypos,zpos;                 // position of the particle
 	float xspeed,yspeed,zspeed;           // speed of the particle
 	bool active;						  // is particle active or not?
-	
+
 public:
 	void CreateParticle();
 	void EvolveParticle();
@@ -37,21 +36,24 @@ public:
 //PARTICULA CPP
 void Particle::CreateParticle()
 {
-	lifetime= (float)rand();
+	lifetime= 0.001;
+	cout << lifetime << "    life " << endl;
 	decay=1;
 	r = 0.7;
 	g = 0.7;
 	b = 1.0;
-	xpos= 256.0;
-	ypos= 128.0;
+	//cout << "pos x" << xpos << endl;
+	xpos= 500.0;
+	//cout << "pos y" << ypos << endl;
+	ypos= 500.0;
 	zpos= 5.0;
 	xspeed = 2-(int)rand() % 5 ;
 	yspeed = 2-(int)rand() % 5  ;
 	zspeed = 2- (int)rand() % 5  ;
 	active = true;
 }
-	
-/* 
+
+/*
  Evolves the particle parameters over time.
  This method changes the vertical and horizontal poition of the particle, its, speed and decay time.
 */
@@ -72,8 +74,8 @@ void Particle::EvolveParticle()
 */
 void Particle::DrawObjects()
 {
-	
-	
+
+
 	if((active==true) && (lifetime>0.0))
 	{
 		glColor3f(r,g,b);
@@ -84,7 +86,7 @@ void Particle::DrawObjects()
 		glTexCoord2f(0.0,1.0); glVertex3f(xpos-3, ypos-3,zpos);     // bottom left
 
 		glEnd();
-	} 
+	}
 }
 
 // Getter and setter methods
@@ -128,16 +130,16 @@ class Box
 private:
 	float boxX;
 	float boxY;
-	float rotAngle;	
+	float rotAngle;
 	int lastFrameTime;
-	
+
 public:
 	Box();
 	void MoveBox();
 	void RotateBox();
 	void TranslateBox(int key);
 	void DrawBox();
-	
+
 };
 // BoX CPP
 
@@ -145,7 +147,7 @@ Box::Box()
 {
 	boxX = 0;
 	boxY = 0;
-	rotAngle = 0;	
+	rotAngle = 0;
 	lastFrameTime = 0;
 }
 
@@ -168,7 +170,7 @@ void Box::MoveBox()
     {
         boxX -= windowWidth;
     }
-	
+
 }
 
 // Moves (translates) the positioin ofthe box.
@@ -181,7 +183,7 @@ void Box::TranslateBox(int key)
 		case GLUT_KEY_LEFT:      boxX -= 5;        break;
 		case GLUT_KEY_RIGHT:      boxX += 5;        break;
 		case GLUT_KEY_F1:	rotAngle += 5;		break;
-			
+
 		default: break;
     }
 }
@@ -196,16 +198,16 @@ void Box::DrawBox()
 {
 	glPushMatrix();
 	glTranslatef(64, 64, 0);
-	// Changes the position of the box x, y, or z directions. 
+	// Changes the position of the box x, y, or z directions.
 	glTranslatef(boxX, boxY, 0.0f);
 	// Rotates the box about the x,y or z axis depending where the '1' is specified in the parameters.
 	// The first parameter is the rotation angle.
 	glRotatef(rotAngle, 0, 0, 1);
-	
-	
-	
+
+
+
 	glBegin(GL_QUADS);
-		
+
 	// Defines each vertex of the box(cube).
 	glVertex2f(-64.0,-64.0);
 	glVertex2f(64.0,-64.0);
@@ -215,11 +217,11 @@ void Box::DrawBox()
 	glVertex2f(64.0,-64.0);
 	glVertex2f(64.0,64.0);
 	glVertex2f(-64.0,64.0);
-	
+
     glEnd();
-	
+
 	glPopMatrix();
-	
+
 }
 
 
@@ -232,12 +234,12 @@ Particle particles[500];
 // Create the particles forthe fountain:
 void CreateParticles()
 {
-	
+
 	for(int i = 0; i <= 500; i++)
 	{
 		particles[i].CreateParticle();
 	}
-	
+
 }
 
 /*
@@ -247,27 +249,27 @@ static void special (int key, int x, int y)
 {
     switch (key)
     {
-		case GLUT_KEY_DOWN:  
+		case GLUT_KEY_DOWN:
 			for(int i = 0; i <= 500; i++)
 		{
-			particles[i].SetYPos((float)particles[i].GetYPos()*1.01f); 
+			particles[i].SetYPos((float)particles[i].GetYPos()*1.01f);
 		}
 			break;
-			
-		case GLUT_KEY_UP:  
+
+		case GLUT_KEY_UP:
 			for(int i = 0; i <= 500; i++)
 			{
-				particles[i].SetG((float)particles[i].GetG()+0.01f); 
+				particles[i].SetG((float)particles[i].GetG()+0.01f);
 			}
 			break;
 		//case GLUT_KEY_UP:      particles[i].SetXPos((float)particles[i].GetXPos()+0.01f);        break;
 		//case GLUT_KEY_LEFT:      zpos -= 5;        break;
 		//case GLUT_KEY_RIGHT:      boxX += 5;        break;
 		//case GLUT_KEY_F1:	rotAngle += 5;		break;
-			
+
 		default: break;
     }
-	
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -276,15 +278,15 @@ static void display(void)
 {
 	// geometry
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	for(int i = 0; i <= 500; i++)
 	{
-		
+
 		particles[i].DrawObjects();
 		//cout << particles[i].GetXPos()<< endl;
-	}	
-	
-	
+	}
+
+
     glutSwapBuffers();
 }
 
@@ -299,37 +301,34 @@ void idle(void)
 	{
 		particles[i].EvolveParticle();
 	}
-	
+
     glutPostRedisplay();
 }
 
 
 int main(int argc, char *argv[])
 {
-	
+
 	CreateParticles();
-	
+
 	glutInitWindowSize(512,512);
 	glutInitWindowPosition(100,100);
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutCreateWindow("OpenGL1");
-	
-	
+
+
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();	
+	glLoadIdentity();
 	gluOrtho2D(0.0, 512.0, 0.0, 512.0);
-	
-	
+
+
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idle);
 	glutSpecialFunc(special);
 	glutMainLoop();
-	
+
 	return EXIT_SUCCESS;
-	
+
 }
-
-
-
