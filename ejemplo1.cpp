@@ -8,13 +8,13 @@
 using namespace std;
 
 const int MaxParticles = 200;		//Constant for Particles array maximum
-int currentParticles = 50;			//Integer of current particles on screen
+int currentParticles = 100;			//Integer of current particles on screen
 
 double mouseX;						//Mouse x and y coordinate
 double mouseY;
 double sizeChange=1.0;				//Size and Speed change variable
-double speedChange=30.0;
-int range=8000;						//Pull Push range
+double speedChange=1.0;
+int range=10000;						//Pull Push range
 int pullPush;
 int pause = 1;
 
