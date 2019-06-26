@@ -38,12 +38,25 @@ void iniciando (){
 		Particulas[i].R = rand()%2;
 		Particulas[i].G = rand()%2;
 		Particulas[i].B = rand()%2;
+		Particulas[i].A = 0;
 		Particulas[i].vx = (rand()%10*0.006)* pow(-1.0,rand()%2);
 		Particulas[i].vy = (rand()%10*0.006)* pow(-1.0,rand()%2);
 		Particulas[i].tam = rand()%10 + 1;
 		Particulas[i].masa = 1.0;
 		Particulas[i].timelife = rand()%2000+2000;
 	}
+}
+
+void circulo(float cx, float cy, float r) {
+	float n_cortes=300;
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < n_cortes; i++)   {
+        float angulo = 2 * 3.1415926f * float(i) / n_cortes; 
+        float x = r * cos(angulo);
+        float y = r * sin(angulo);
+        glVertex2f(x + cx, y + cy);
+    }
+    glEnd();
 }
 
 void displayTimeLife(){
@@ -56,11 +69,15 @@ void displayTimeLife(){
 			Particulas[i].x += Particulas[i].vx*velocidadPar;	//cordenadas x,y
 			Particulas[i].y += Particulas[i].vy*velocidadPar;
 			Particulas[i].timelife -=1;
-
+			//Particulas[i].A -=0.1;
+			
 			glPointSize(Particulas[i].tam*tamPar);	//Tamanio
 			glBegin(GL_POINTS);							
-			glColor3f(Particulas[i].R,Particulas[i].G,Particulas[i].B);
-			glVertex2f(Particulas[i].x, Particulas[i].y);
+			glColor4f(Particulas[i].R,Particulas[i].G,Particulas[i].B,Particulas[i].A);
+			//glTranslatef(Particulas[i].x, Particulas[i].y, 0.0f);
+			//glutSolidSphere(Particulas[i].tam*tamPar, 20, 20);
+			circulo(Particulas[i].x, Particulas[i].y, Particulas[i].tam*tamPar);
+			//glVertex2f(Particulas[i].x, Particulas[i].y);
 			glEnd();
 			glColor3f(1.0,0.0,0.0);
 		}
