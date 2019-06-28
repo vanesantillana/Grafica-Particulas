@@ -47,22 +47,12 @@ void iniciando (){
 	}
 }
 
-void circulo(float cx, float cy, float r) {
-	float n_cortes=300;
-    glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < n_cortes; i++)   {
-        float angulo = 2 * 3.1415926f * float(i) / n_cortes; 
-        float x = r * cos(angulo);
-        float y = r * sin(angulo);
-        glVertex2f(x + cx, y + cy);
-    }
-    glEnd();
-}
-
 void displayTimeLife(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
-	
+	glLoadIdentity();
+	gluPerspective(45,1.0,1.0,10000);
+	gluLookAt(0,0,-1000,0,0,0,0,1,0);
 	for(int i=0;i<cantidadParticulas;i++){
 		if (Particulas[i].timelife!=0){ // Su tiempo de vida 
 
@@ -70,16 +60,18 @@ void displayTimeLife(){
 			Particulas[i].y += Particulas[i].vy*velocidadPar;
 			Particulas[i].timelife -=1;
 			//Particulas[i].A -=0.1;
-			
-			glPointSize(Particulas[i].tam*tamPar);	//Tamanio
-			glBegin(GL_POINTS);							
-			glColor4f(Particulas[i].R,Particulas[i].G,Particulas[i].B,Particulas[i].A);
-			//glTranslatef(Particulas[i].x, Particulas[i].y, 0.0f);
-			//glutSolidSphere(Particulas[i].tam*tamPar, 20, 20);
-			circulo(Particulas[i].x, Particulas[i].y, Particulas[i].tam*tamPar);
+			glPushMatrix();
+			//glPointSize(Particulas[i].tam*tamPar);	//Tamanio
+			//glBegin(GL_POINTS);							
+			glColor3f(Particulas[i].R,Particulas[i].G,Particulas[i].B);
+
+			glTranslatef(Particulas[i].x, Particulas[i].y, 0.0f);
+			glutSolidSphere(Particulas[i].tam*tamPar, 20, 20);
 			//glVertex2f(Particulas[i].x, Particulas[i].y);
-			glEnd();
+			//glEnd();
 			glColor3f(1.0,0.0,0.0);
+
+			glPopMatrix();
 		}
 		else if(continuo){ //genera nuevas particulas
 			Particulas[i].x = mouseX;
@@ -131,8 +123,8 @@ void mouse(int btn, int state, int x, int y){
 	y = 700 - y; // Centra la coordinada y
 	if(btn == GLUT_LEFT_BUTTON && state==GLUT_DOWN){
 		cout<<"Caso 1"<<endl;
-		mouseX = x;
-		mouseY = y;
+		mouseX = 0;
+		mouseY = 0;
 		continuo = false;
 		iniciando();		
 	}
